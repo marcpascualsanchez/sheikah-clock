@@ -1,5 +1,5 @@
-#ifndef wifi_connection_h
-#define wifi_connection_h
+#ifndef WIFI_CONNECTION_H
+#define WIFI_CONNECTION_H
 
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
