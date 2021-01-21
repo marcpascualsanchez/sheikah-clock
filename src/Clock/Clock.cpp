@@ -30,8 +30,7 @@ ts Clock::getTime()
 int Clock::getFormattedTime()
 {
     DS3231_get(&t);
-    int totalHour = (t.min * 100) + t.sec;
-    // int totalHour = (t.hour * 100) + t.min;
+    int totalHour = (t.hour * 100) + t.min;
     return totalHour;
 }
 

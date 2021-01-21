@@ -47,5 +47,6 @@ void loop()
     isAPIRequestDone = false;
   }
   Serial.println("Displaying.....");
+  // TODO: why does the clock not advance in time?
   displayController.displayNumber(clockController.getFormattedTime());
 }
