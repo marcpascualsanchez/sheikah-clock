@@ -1,26 +1,51 @@
 #include <Arduino.h>
 #include "WiFiConnection/WiFiConnection.h"
+#include "Clock/Clock.h"
+#include "Display/Display.h"
 
-using namespace std;
-
-WiFiConnection connection;
+bool isAPIRequestDone = false;
+WiFiConnection connectionController;
+Clock clockController;
+Display displayController;
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(9600);
   delay(1000);
-  Serial.println("Starting...");
-  connection.setup();
+  Serial.println("Setting up modules...");
+  connectionController.setup();
+  clockController.setup();
+  displayController.setup();
+  Serial.println("Modules ready");
+}
+
+void getAPILoop()
+{
+  connectionController.makeAPIRequest();
+  float temperature = connectionController.getTemperature();
+  string icon = connectionController.getWeather();
+  Serial.println("Temperature: ");
+  Serial.println(temperature);
+  Serial.println("Icon: ");
+  Serial.println(icon.c_str());
 }
 
 void loop()
 {
-  connection.makeAPIRequest();
-  float temp = connection.getTemperature();
-  string icon = connection.getWeather();
-  Serial.println("Temperature: ");
-  Serial.println(temp);
-  Serial.println("Icon: ");
-  Serial.println(icon.c_str());
-  delay(30000);
+  ts currentTime = clockController.getTime();
+
+  if (currentTime.min % 5 == 0)
+  {
+    if (!isAPIRequestDone)
+    {
+      getAPILoop();
+      isAPIRequestDone = true;
+    }
+  }
+  else
+  {
+    isAPIRequestDone = false;
+  }
+  Serial.println("Displaying.....");
+  displayController.displayNumber(clockController.getFormattedTime());
 }

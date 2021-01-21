@@ -6,13 +6,11 @@
 #define CLK 5
 #define DIO 4
 
-TM1637Display display(CLK, DIO);
-
 class Display
 {
-    public:
-        void setupDisplay();
-        void displayNumber(int number);
+public:
+    void setup();
+    void displayNumber(int number);
 };
 
 #endif
