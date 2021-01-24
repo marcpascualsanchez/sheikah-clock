@@ -4,19 +4,44 @@
 #include "Display/Display.h"
 
 bool isAPIRequestDone = false;
+bool isTemperatureShowed = false;
 WiFiConnection connectionController;
 Clock clockController;
 Display displayController;
+
+void getAPILopp();
+void display();
 
 void setup()
 {
   Serial.begin(9600);
   delay(1000);
   Serial.println("Setting up modules...");
-  connectionController.setup();
+  // connectionController.setup();
   clockController.setup();
   displayController.setup();
   Serial.println("Modules ready");
+}
+
+void loop()
+{
+  ts currentTime = clockController.getTime();
+
+  if (currentTime.min % 5 == 0)
+  {
+    if (!isAPIRequestDone)
+    {
+      // getAPILoop();
+      isAPIRequestDone = true;
+    }
+  }
+  else
+  {
+    isAPIRequestDone = false;
+  }
+
+  clockController.checkButtons();
+  display();
 }
 
 void getAPILoop()
@@ -30,23 +55,20 @@ void getAPILoop()
   Serial.println(icon.c_str());
 }
 
-void loop()
+void display()
 {
-  ts currentTime = clockController.getTime();
-
-  if (currentTime.min % 5 == 0)
+  if (clockController.configState != INACTIVE)
   {
-    if (!isAPIRequestDone)
-    {
-      getAPILoop();
-      isAPIRequestDone = true;
+    // TODO: set brightness high and low every x time when configState is active -> make user understand its configuring
+    if (clockController.configState == MINUTE) {
+      displayController.displayNumber(clockController.getFormattedConfiguredMinute());
+    } else if (clockController.configState == HOUR) {
+      displayController.displayNumber(clockController.getFormattedConfiguredHour());
     }
   }
   else
   {
-    isAPIRequestDone = false;
+    // TODO: show temperature without using delay (blocks buttons)
+    displayController.displayNumber(clockController.getFormattedTime());
   }
-  Serial.println("Displaying.....");
-  // TODO: why does the clock not advance in time?
-  displayController.displayNumber(clockController.getFormattedTime());
 }

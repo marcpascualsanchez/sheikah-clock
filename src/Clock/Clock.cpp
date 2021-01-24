@@ -37,27 +37,44 @@ int Clock::getFormattedTime()
 void Clock::checkConfigButton()
 {
     configButtonState = digitalRead(CONFIG_BUTTON);
-    if (configButtonState == HIGH)
+    if (configButtonState == HIGH && configButtonState != lastConfigButtonState)
     {
         if (configState == INACTIVE)
         {
             configState = MINUTE;
         }
+        else if (configState == MINUTE)
+        {
+            configState = HOUR;
+        }
         else if (configState == HOUR)
         {
             // Set configured hour to clock
-            ts configuredTime;
-            configuredTime.hour = currentHour;
-            configuredTime.min = currentMinute;
-            configuredTime.sec = 0;
-            setTime(configuredTime);
+            t.hour = configuredHour;
+            t.min = configuredMinute;
+            t.sec = 0;
+            setTime(t);
             configState = INACTIVE;
         }
-        else
-        {
-            // Set configure hour mode
-            configState = INACTIVE;
-        }
+    }
+    lastConfigButtonState = configButtonState;
+}
+
+void Clock::setCurrentMinute(int addition) {
+    configuredMinute += addition;
+    if (configuredMinute > 59) {
+        configuredMinute = 0;
+    } else if (configuredMinute < 0) {
+        configuredMinute = 59;
+    }
+}
+
+void Clock::setCurrentHour(int addition) {
+    configuredHour += addition;
+    if (configuredHour > 23) {
+        configuredHour = 0;
+    } else if (configuredHour < 0) {
+        configuredHour = 23;
     }
 }
 
@@ -65,32 +82,58 @@ void Clock::checkAddMinusButtons()
 {
     minusButtonState = digitalRead(MINUS_BUTTON);
     addButtonState = digitalRead(ADD_BUTTON);
-    if (minusButtonState == HIGH) {
+    if (minusButtonState == HIGH  && minusButtonState != lastMinusButtonState) {
         if (configState == MINUTE)
         {
-            currentMinute--;
+            setCurrentMinute(-1);
         }
         else if(configState == HOUR)
         {
             // Set configure hour mode
-            currentHour--;
+            setCurrentHour(-1);
         }
     }
-    if (addButtonState == HIGH) {
+    lastMinusButtonState = minusButtonState;
+    if (addButtonState == HIGH && addButtonState != lastAddButtonState) {
         if (configState == MINUTE)
         {
-            currentMinute--;
+            setCurrentMinute(1);
         }
         else if(configState == HOUR)
         {
             // Set configure hour mode
-            currentHour--;
+            setCurrentHour(1);
         }
     }
+    lastAddButtonState = addButtonState;
 }
 
 void Clock::checkButtons()
 {
     checkConfigButton();
     checkAddMinusButtons();
+}
+
+int Clock::getFormattedConfiguredHour()
+{
+    int totalHour = (configuredHour * 100);
+    return totalHour;
+}
+
+int Clock::getFormattedConfiguredMinute()
+{
+    return configuredMinute;
+}
+
+void Clock::log() {
+    DS3231_get(&t);
+    Serial.print("hour");
+    Serial.print(t.hour);
+    Serial.print("\n");
+    Serial.print("min");
+    Serial.print(t.min);
+    Serial.print("\n");
+    Serial.print("sec");
+    Serial.print(t.sec);
+    Serial.print("\n");
 }

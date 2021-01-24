@@ -22,11 +22,17 @@ class Clock
     public:
         struct ts t;
         EConfigState configState = INACTIVE;
+        /** Config button */
+        int lastConfigButtonState;
         int configButtonState;
+        /** Add button */
+        int lastAddButtonState;
         int addButtonState;
+        /** Minus button */
+        int lastMinusButtonState;
         int minusButtonState;
-        int currentMinute = 0;
-        int currentHour = 0;
+        int configuredMinute = 0;
+        int configuredHour = 0;
         ts getTime();
         void setup();
         void setTime(ts time);
@@ -34,6 +40,11 @@ class Clock
         void checkConfigButton();
         void checkAddMinusButtons();
         int getFormattedTime();
+        int getFormattedConfiguredHour();
+        int getFormattedConfiguredMinute();
+        void setCurrentMinute(int addition);
+        void setCurrentHour(int addition);
+        void log();
 };
 
 #endif

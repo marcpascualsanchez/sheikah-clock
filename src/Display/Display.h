@@ -11,6 +11,7 @@ class Display
 public:
     void setup();
     void displayNumber(int number);
+    void setBrightness(uint8_t brightnessLevel);
 };
 
 #endif
