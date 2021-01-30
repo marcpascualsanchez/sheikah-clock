@@ -31,6 +31,7 @@ class WiFiConnection
         string getWeather();
         void setWeather(string newWeather);
         float getTemperature();
+        int getTemperatureInt();
         void setTemperature(float newTemperature);
 };
 

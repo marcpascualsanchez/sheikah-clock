@@ -40,8 +40,6 @@ class Clock
         void checkConfigButton();
         void checkAddMinusButtons();
         int getFormattedTime();
-        int getFormattedConfiguredHour();
-        int getFormattedConfiguredMinute();
         void setCurrentMinute(int addition);
         void setCurrentHour(int addition);
         void log();

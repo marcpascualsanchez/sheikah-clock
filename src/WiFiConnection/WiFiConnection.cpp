@@ -47,6 +47,11 @@ float WiFiConnection::getTemperature()
     return currentTemperature;
 }
 
+int WiFiConnection::getTemperatureInt()
+{
+    return round(currentTemperature);
+}
+
 void WiFiConnection::setTemperature(float newTemperature)
 {
     currentTemperature = newTemperature;
@@ -63,6 +68,8 @@ void WiFiConnection::makeAPIRequest()
     queryString += "&units=metric";
     string targetURL = baseURL + "?" + queryString;
 
+    Serial.println(targetURL.c_str());
+
     http.begin(targetURL.c_str()); // Specify request destination
     http.GET();                    // Send the request
     String payload = http.getString(); // Get the response payload
@@ -71,7 +78,7 @@ void WiFiConnection::makeAPIRequest()
 
     if (error)
     {
-        Serial.print(F("deserializeJson() failed: "));
+        Serial.print("deserializeJson() failed: ");
         Serial.println(error.f_str());
         return;
     }

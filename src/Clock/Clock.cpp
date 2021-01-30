@@ -7,13 +7,13 @@ void Clock::setup()
     pinMode(MINUS_BUTTON, INPUT);
     Wire.begin();
     DS3231_init(0);
-    t.hour = 21;
-    t.min = 15;
-    t.sec = 0;
-    t.mday = 25;
-    t.mon = 10;
-    t.year = 2020;
-    DS3231_set(t);
+    // t.hour = 21;
+    // t.min = 15;
+    // t.sec = 0;
+    // t.mday = 25;
+    // t.mon = 10;
+    // t.year = 2020;
+    // DS3231_set(t);
 }
 
 void Clock::setTime(ts time)
@@ -41,10 +41,12 @@ void Clock::checkConfigButton()
     {
         if (configState == INACTIVE)
         {
+            configuredMinute = t.min;
             configState = MINUTE;
         }
         else if (configState == MINUTE)
         {
+            configuredHour = t.hour;
             configState = HOUR;
         }
         else if (configState == HOUR)
@@ -112,17 +114,6 @@ void Clock::checkButtons()
 {
     checkConfigButton();
     checkAddMinusButtons();
-}
-
-int Clock::getFormattedConfiguredHour()
-{
-    int totalHour = (configuredHour * 100);
-    return totalHour;
-}
-
-int Clock::getFormattedConfiguredMinute()
-{
-    return configuredMinute;
 }
 
 void Clock::log() {
