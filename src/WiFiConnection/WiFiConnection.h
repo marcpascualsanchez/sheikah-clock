@@ -14,11 +14,11 @@ const string CLEAR_SKY = "01d";        // clear sky
 const string FEW_CLOUDS = "02d";       // few clouds
 const string SCATTERED_CLOUDS = "03d"; // scattered clouds
 const string BROKEN_CLOUDS = "04d";    // broken clouds
+const string MIST = "50d";             // mist
 const string SHOWER_RAIN = "09d";      // shower rain
 const string RAIN = "10d";             // rain
 const string THUNDERSTORM = "11d";     // thunderstorm
 const string SNOW = "13d";             // snow
-const string MIST = "50d";             // mist
 
 
 class WiFiConnection

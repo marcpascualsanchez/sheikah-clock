@@ -2,12 +2,14 @@
 #include "WiFiConnection/WiFiConnection.h"
 #include "Clock/Clock.h"
 #include "Display/Display.h"
+#include "RGBLeds/RGBLeds.h"
 
 bool isAPIRequestDone = false;
 bool isTemperatureShowed = false;
 WiFiConnection connectionController;
 Clock clockController;
 Display displayController;
+RGBLeds rgbLedsController;
 EConfigState lastConfigState;
 
 void getAPILoop();
@@ -21,8 +23,9 @@ void setup()
   connectionController.setup();
   clockController.setup();
   displayController.setup();
-  getAPILoop();
+  rgbLedsController.setup();
   Serial.println("Modules ready");
+  getAPILoop();
 }
 
 void loop()
@@ -44,19 +47,17 @@ void loop()
 
   clockController.checkButtons();
   display(currentTime);
+  rgbLedsController.displayLeds();
   lastConfigState = clockController.configState;
 }
 
 void getAPILoop()
 {
   connectionController.makeAPIRequest();
-  // float temperature = connectionController.getTemperature();
-  // Serial.println("Temperature: ");
-  // Serial.println(temperature);
-  // TODO: translate weather icon into rgb colors
   string icon = connectionController.getWeather();
-  Serial.println("Icon: ");
-  Serial.println(icon.c_str());
+  // Serial.println("Icon: ");
+  // Serial.println(icon.c_str());
+  rgbLedsController.setWeather(icon);
 }
 
 void display(ts time)

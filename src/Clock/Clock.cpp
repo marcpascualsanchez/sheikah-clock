@@ -7,13 +7,6 @@ void Clock::setup()
     pinMode(MINUS_BUTTON, INPUT);
     Wire.begin();
     DS3231_init(0);
-    // t.hour = 21;
-    // t.min = 15;
-    // t.sec = 0;
-    // t.mday = 25;
-    // t.mon = 10;
-    // t.year = 2020;
-    // DS3231_set(t);
 }
 
 void Clock::setTime(ts time)
