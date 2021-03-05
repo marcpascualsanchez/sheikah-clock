@@ -10,16 +10,15 @@
 using string = std::string;
 
 // enum weather
-const string CLEAR_SKY = "01d";        // clear sky
-const string FEW_CLOUDS = "02d";       // few clouds
-const string SCATTERED_CLOUDS = "03d"; // scattered clouds
-const string BROKEN_CLOUDS = "04d";    // broken clouds
-const string MIST = "50d";             // mist
-const string SHOWER_RAIN = "09d";      // shower rain
-const string RAIN = "10d";             // rain
-const string THUNDERSTORM = "11d";     // thunderstorm
-const string SNOW = "13d";             // snow
-
+const string CLEAR_SKY = "01";        // clear sky
+const string FEW_CLOUDS = "02";       // few clouds
+const string SCATTERED_CLOUDS = "03"; // scattered clouds
+const string BROKEN_CLOUDS = "04";    // broken clouds
+const string MIST = "50";             // mist
+const string SHOWER_RAIN = "09";      // shower rain
+const string RAIN = "10";             // rain
+const string THUNDERSTORM = "11";     // thunderstorm
+const string SNOW = "13";             // snow
 
 class WiFiConnection
 {

@@ -70,8 +70,8 @@ void WiFiConnection::makeAPIRequest()
 
     Serial.println(targetURL.c_str());
 
-    http.begin(targetURL.c_str()); // Specify request destination
-    http.GET();                    // Send the request
+    http.begin(targetURL.c_str());     // Specify request destination
+    http.GET();                        // Send the request
     String payload = http.getString(); // Get the response payload
     StaticJsonDocument<900> payloadJSON;
     DeserializationError error = deserializeJson(payloadJSON, payload.c_str());
@@ -84,8 +84,14 @@ void WiFiConnection::makeAPIRequest()
     }
 
     JsonObject weather = payloadJSON["weather"][0];
-    const char* icon = weather["icon"];
-    setWeather(icon);
+    // The API returns different icons depending on day/night time,
+    // last char refers to this so we remove it
+    const char* iconChar = weather["icon"];
+    string icon(iconChar);
+    string parsedIcon = icon.substr(0, icon.size() - 1);
+    setWeather(parsedIcon);
+    Serial.println("Current weather is: ");
+    Serial.println(parsedIcon.c_str());
     JsonObject main = payloadJSON["main"];
     float temperature = main["temp"];
     setTemperature(temperature);

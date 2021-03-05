@@ -5,11 +5,12 @@
 #include <array>
 #include "../WiFiConnection/WiFiConnection.h"
 
+#define COLOR_ORDER GRB
 #define RGBLED_PIN 12
 #define NUM_LEDS 19
 #define LED_TYPE WS2812
-#define MIN_BRIGHTNESS 8
-#define MAX_BRIGHTNESS 64
+#define MIN_BRIGHTNESS 32
+#define MAX_BRIGHTNESS 128
 
 // enum weather led ranges
 const int CLEAR_SKY_LENGTH = 0;
@@ -26,18 +27,19 @@ class RGBLeds
 {
 public:
     void setup();
-    void displayLeds();
+    void displayLeds(boolean isChangeColor);
     void setWeather(string weather);
     void setColor();
     void resetColor();
-    string currentWeather = CLEAR_SKY;
-    int tickCount = 0;
-    int hue = 0;
-    int divisor = 30;
-    int activeColor[3] = {64, 127, 197}; // dark blue
-    // int activeColor[3] = {90,184,244}; // light blue
-    int inactiveColor[3] = {190, 126, 27}; // orange
-    // int inactiveColor[3] = {235,197,25}; // yellow
+    float getBreathBrightness();
+    string currentWeather = RAIN;
+    int breathStep = 1;
+    unsigned int tickCounter = 0;
+    // !!! WARNING: RGB is not the right order -> GRB
+    // uint8_t activeColor[3] = {54, 14, 100}; // dark blue
+    // uint8_t inactiveColor[3] = {85, 176, 0}; // orange
+    uint8_t activeColor[3] = {14, 54, 100}; // dark blue
+    uint8_t inactiveColor[3] = {176, 85, 0}; // orange
     int CLEAR_SKY_RANGE[CLEAR_SKY_LENGTH] = {};                                    // clear sky
     int FEW_CLOUDS_RANGE[FEW_CLOUDS_LENGTH] = {9, 8, 7, 3};                        // few clouds
     int SCATTERED_CLOUDS_RANGE[SCATTERED_CLOUDS_LENGTH] = {9, 8, 7, 6, 5, 4, 3};   // scattered clouds

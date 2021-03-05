@@ -4,32 +4,38 @@ struct CRGB leds[NUM_LEDS];
 
 void RGBLeds::setup()
 {
-    LEDS.addLeds<LED_TYPE, RGBLED_PIN>(leds, NUM_LEDS);
-    FastLED.setBrightness(MAX_BRIGHTNESS);
+    LEDS.addLeds<LED_TYPE, RGBLED_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
+    FastLED.setBrightness(getBreathBrightness());
     FastLED.clear();
     resetColor();
+    FastLED.show();
 }
 
-void RGBLeds::displayLeds()
+float RGBLeds::getBreathBrightness()
 {
-    tickCount++;
-    if (tickCount >= 5)
+    tickCounter += breathStep;
+    float breath = (exp(sin(tickCounter/500.0*PI)) - 0.36787944)*108.0;
+    breath = map(breath, 0, 255, MIN_BRIGHTNESS, MAX_BRIGHTNESS);
+    return breath;
+}
+
+void RGBLeds::displayLeds(boolean isChangeColor)
+{
+    // uint8_t brt = getBreathBrightness();
+    // Serial.println(brt);
+    FastLED.setBrightness(getBreathBrightness());
+    if (isChangeColor)
     {
-        float breath = (exp(sin(millis() / 5000.0 * PI)) - 0.36787944) * 108.0;
-        breath = map(breath, 0, 255, MIN_BRIGHTNESS, MAX_BRIGHTNESS);
-        FastLED.setBrightness(breath);
         resetColor();
         setColor();
-        FastLED.show();
-        tickCount = 0;
     }
+    FastLED.show();
 }
 
 void RGBLeds::setWeather(string weather)
 {
     currentWeather = weather;
 }
-
 
 void RGBLeds::resetColor()
 {

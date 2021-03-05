@@ -6,6 +6,11 @@
 
 bool isAPIRequestDone = false;
 bool isTemperatureShowed = false;
+bool isTimeShowed = true;
+uint8_t lastMinute;
+ts currentTime;
+uint8_t tickCount = 0;
+
 WiFiConnection connectionController;
 Clock clockController;
 Display displayController;
@@ -20,23 +25,32 @@ void setup()
   Serial.begin(9600);
   delay(1000);
   Serial.println("Setting up modules...");
-  connectionController.setup();
   clockController.setup();
   displayController.setup();
+  currentTime = clockController.getTime();
+  displayController.displayNumber(clockController.getFormattedTime(currentTime));
   rgbLedsController.setup();
+  connectionController.setup();
   Serial.println("Modules ready");
   getAPILoop();
 }
 
 void loop()
 {
-  ts currentTime = clockController.getTime();
+  tickCount += 1;
+  if (tickCount == 0)
+  {
+    currentTime = clockController.getTime();
+    lastMinute = currentTime.min;
+    isTimeShowed = false;
+  }
 
   if (currentTime.min % 5 == 0)
   {
     if (!isAPIRequestDone)
     {
       getAPILoop();
+      rgbLedsController.displayLeds(true);
       isAPIRequestDone = true;
     }
   }
@@ -46,8 +60,9 @@ void loop()
   }
 
   clockController.checkButtons();
+  // Only display new sec if has changed
   display(currentTime);
-  rgbLedsController.displayLeds();
+  rgbLedsController.displayLeds(false);
   lastConfigState = clockController.configState;
 }
 
@@ -62,9 +77,11 @@ void getAPILoop()
 
 void display(ts time)
 {
+  // STATUS: configuring active
   if (clockController.configState != INACTIVE)
   {
-    if (clockController.configState != lastConfigState) {
+    if (clockController.configState != lastConfigState)
+    {
       displayController.clear();
     }
     // TODO: set brightness high and low every x time when configState is active -> make user understand its configuring
@@ -76,6 +93,7 @@ void display(ts time)
     {
       displayController.displayOnlyHours(clockController.configuredHour);
     }
+    // pampallugues
     if (time.sec % 2 == 0)
     {
       displayController.setBrightness(1);
@@ -93,13 +111,15 @@ void display(ts time)
       {
         displayController.displayTemperature(connectionController.getTemperatureInt());
         isTemperatureShowed = true;
+        isTimeShowed = false;
       }
     }
-    else
+    else if (!isTimeShowed || lastMinute != currentTime.min)
     {
-      displayController.displayNumber(clockController.getFormattedTime()); // real time
+      displayController.displayNumber(clockController.getFormattedTime(currentTime)); // real time
       isTemperatureShowed = false;
+      isTimeShowed = true;
     }
-    // clockController.log();
   }
+  // clockController.log();
 }

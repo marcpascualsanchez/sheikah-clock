@@ -39,7 +39,7 @@ class Clock
         void checkButtons();
         void checkConfigButton();
         void checkAddMinusButtons();
-        int getFormattedTime();
+        int getFormattedTime(ts time);
         void setCurrentMinute(int addition);
         void setCurrentHour(int addition);
         void log();
