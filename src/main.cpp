@@ -33,7 +33,6 @@ void setup()
   connectionController.setup();
   Serial.println("Modules ready");
   getAPILoop();
-  rgbLedsController.displayLeds(true);
 }
 
 void loop()
@@ -51,7 +50,6 @@ void loop()
     if (!isAPIRequestDone)
     {
       getAPILoop();
-      rgbLedsController.displayLeds(true);
     }
   }
   else
@@ -69,10 +67,9 @@ void loop()
 void getAPILoop()
 {
   connectionController.makeAPIRequest();
-  string icon = connectionController.getWeather();
-  // Serial.println("Icon: ");
-  // Serial.println(icon.c_str());
-  rgbLedsController.setWeather(icon);
+  string weather = connectionController.getWeather();
+  rgbLedsController.setWeather(weather);
+  rgbLedsController.displayLeds(true);
   isAPIRequestDone = true;
 }
 
