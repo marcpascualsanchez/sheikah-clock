@@ -21,8 +21,6 @@ float RGBLeds::getBreathBrightness()
 
 void RGBLeds::displayLeds(boolean isChangeColor)
 {
-    // uint8_t brt = getBreathBrightness();
-    // Serial.println(brt);
     FastLED.setBrightness(getBreathBrightness());
     if (isChangeColor)
     {

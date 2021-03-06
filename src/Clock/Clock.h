@@ -5,7 +5,7 @@
 #include <Wire.h>
 
 #define CONFIG_BUTTON 14
-#define ADD_BUTTON 15
+#define ADD_BUTTON 13
 #define MINUS_BUTTON 16
 
 /** There are only three states, only one can be activated (configStates)

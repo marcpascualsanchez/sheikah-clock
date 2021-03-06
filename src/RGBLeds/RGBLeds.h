@@ -7,7 +7,7 @@
 
 // !!! WARNING: RGB is not the right order -> GRB
 #define COLOR_ORDER GRB
-#define RGBLED_PIN 12
+#define RGBLED_PIN 15
 #define NUM_LEDS 19
 #define LED_TYPE WS2812
 #define MIN_BRIGHTNESS 32
