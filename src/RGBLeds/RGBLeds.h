@@ -5,6 +5,7 @@
 #include <array>
 #include "../WiFiConnection/WiFiConnection.h"
 
+// !!! WARNING: RGB is not the right order -> GRB
 #define COLOR_ORDER GRB
 #define RGBLED_PIN 12
 #define NUM_LEDS 19
@@ -35,11 +36,10 @@ public:
     string currentWeather = RAIN;
     int breathStep = 1;
     unsigned int tickCounter = 0;
-    // !!! WARNING: RGB is not the right order -> GRB
     // uint8_t activeColor[3] = {54, 14, 100}; // dark blue
     // uint8_t inactiveColor[3] = {85, 176, 0}; // orange
-    uint8_t activeColor[3] = {14, 54, 100}; // dark blue
-    uint8_t inactiveColor[3] = {176, 85, 0}; // orange
+    uint8_t activeColor[3] = {14, 54, 150}; // dark blue
+    uint8_t inactiveColor[3] = {220, 85, 0}; // orange
     int CLEAR_SKY_RANGE[CLEAR_SKY_LENGTH] = {};                                    // clear sky
     int FEW_CLOUDS_RANGE[FEW_CLOUDS_LENGTH] = {9, 8, 7, 3};                        // few clouds
     int SCATTERED_CLOUDS_RANGE[SCATTERED_CLOUDS_LENGTH] = {9, 8, 7, 6, 5, 4, 3};   // scattered clouds
