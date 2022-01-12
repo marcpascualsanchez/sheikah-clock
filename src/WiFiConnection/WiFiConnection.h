@@ -14,10 +14,14 @@
 
 using string = std::string;
 
-// eeprom
-const int FLASH_RESERVED_SIZE = 512;
+// wifi connection
+const string API_BASE_URL = "http://api.openweathermap.org/data/2.5/weather";
+const string API_APP_ID = "fdcc7faa093ed6c4ff18ab74330ed00b";
+const int maxConnectionRetries = 20;
 // access point
 const string ACCESS_POINT_SSID = "sheikah-clock";
+// eeprom
+const int FLASH_RESERVED_SIZE = 512;
 // enum weather
 const string CLEAR_SKY = "01";        // clear sky
 const string FEW_CLOUDS = "02";       // few clouds
@@ -32,20 +36,19 @@ const string SNOW = "13";             // snow
 class WiFiConnection
 {
     public:
-        int maxConnectionRetries = 20;
         string currentWeather = CLEAR_SKY;
-        bool isWiFiConnected = false;
+        static bool isWiFiConnected;
+        static bool isForceApiRequest;
         float currentTemperature = 0;
-        void connectToWiFiRouter();
-        void createAccessPoint();
+        static void connectToWiFiRouter();
+        static void createAccessPoint();
+        static String htmlProcessor(const String& var);
         void makeAPIRequest();
         string getWeather();
         void setWeather(string newWeather);
         float getTemperature();
         int getTemperatureInt();
         void setTemperature(float newTemperature);
-        string replaceCharWithString(string text, string target, string replacement);
-        string removeSpecialCharacters(string text);
 };
 
 #endif

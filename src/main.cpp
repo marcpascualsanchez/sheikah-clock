@@ -56,6 +56,11 @@ void loop()
     isAPIRequestDone = false;
   }
 
+  if (connectionController.isForceApiRequest) {
+    getAPILoop();
+    connectionController.isForceApiRequest = false;
+  }
+
   clockController.checkButtons();
   // Only display new sec if has changed
   display(currentTime);
