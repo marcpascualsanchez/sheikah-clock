@@ -7,22 +7,18 @@
      display: inline-block;
      margin: 0px auto;
      text-align: center;
+     color: #39c3d4;
+     background-color: #303234;
     }
-    h2 { font-size: 3.0rem; }
-    p { font-size: 3.0rem; }
-    .units { font-size: 1.2rem; }
-    .dht-labels{
-      font-size: 1.5rem;
-      vertical-align:middle;
-      padding-bottom: 15px;
-    }
+    h2 { font-size: 3.0rem; margin-bottom: 0; color: #d08f28; }
+    h3 { font-size: 1.3rem; margin-top: 0; margin-bottom: 40px; font-weight: normal; }
+    .detail { font-size: 1rem; font-style: italic; }
+    label { font-weight: bold; }
   </style>
 </head>
 <body>
   <h2>Sheikah clock</h2>
-  <p>
-    <span class="dht-labels">Fill the form to configurate the clock. This data will only be used by the clock to display the weather & temperature.</span>
-  </p>
+  <h3>Configuration</h3>
   <form action="/config">
     <label for="ssid">WiFi name</label><br>
     <input type="text" id="ssid" name="ssid" value="%WiFiSSID%"><br><br>
@@ -32,5 +28,6 @@
     <input type="text" id="city" name="city" value="%cityName%"><br><br>
     <input type="submit" value="Save">
   </form>
+  <p class="detail">This data will not be shared and will only be used to display the weather & temperature</p>
 </body>
 </html>
