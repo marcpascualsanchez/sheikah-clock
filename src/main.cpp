@@ -32,7 +32,6 @@ void setup()
   rgbLedsController.setup();
   connectionController.connectToWiFiRouter();
   Serial.println("Modules ready");
-  getAPILoop();
 }
 
 void loop()
@@ -45,7 +44,7 @@ void loop()
     isTimeShowed = false;
   }
 
-  if (currentTime.min % 5 == 0 && connectionController.isWiFiConnected)
+  if (currentTime.min % 5 == 0)
   {
     if (!isAPIRequestDone)
     {
@@ -66,6 +65,10 @@ void loop()
 
 void getAPILoop()
 {
+  if (!connectionController.isWiFiConnected)
+  {
+    return;
+  }
   connectionController.makeAPIRequest();
   string weather = connectionController.getWeather();
   rgbLedsController.setWeather(weather);
