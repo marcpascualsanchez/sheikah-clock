@@ -51,7 +51,7 @@ String processor(const String& var){
     return String(WiFiPassword.c_str());
   }
   if(var == "cityName"){
-    return String(cityName.c_str());
+    return String(replaceCharWithString(cityName, "%20", " "));
   }
   return String();
 }
