@@ -62,7 +62,7 @@ void WiFiConnection::connectToWiFiRouter()
     delay(1000);
     WiFi.mode(WIFI_STA); //This line hides the viewing of ESP as wifi hotspot
 
-    WiFi.begin(); //Connect to your WiFi router
+    WiFi.begin(); // Connect to your WiFi router
     Serial.println("");
 
     Serial.print("Connecting");
@@ -86,7 +86,6 @@ void WiFiConnection::connectToWiFiRouter()
     } else {
         Serial.print("Could not connect to ");
         Serial.println(WiFiSSID.c_str());
-        isWiFiConnected = false;
         createAccessPoint();
     }
 }
@@ -97,6 +96,19 @@ void savePersistentCityName(string newCityName)
     string formattedCityName = replaceCharWithString(removeSpecialCharacters(newCityName), " ", "%20");
     EEPROM.put(0, formattedCityName);
     EEPROM.end();
+    cityName = formattedCityName;
+}
+
+string reloadCityName()
+{
+    EEPROM.begin(FLASH_RESERVED_SIZE);
+    Serial.println("EEPROM began");
+    EEPROM.get(0, cityName);
+    Serial.println("EEPROM got cityName");
+    Serial.println(cityName.c_str());
+    Serial.println("EEPROM got cityName");
+    EEPROM.end();
+    return cityName;
 }
 
 void savePersistentConfig(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final){
@@ -107,6 +119,7 @@ void savePersistentConfig(AsyncWebServerRequest *request, String filename, size_
 
 void WiFiConnection::createAccessPoint()
 {
+    isWiFiConnected = false;
     Serial.print("Setting AP (Access Point)…");
     WiFi.softAP(ACCESS_POINT_SSID.c_str());
     Serial.println("Server will be up in IP address:");
@@ -126,13 +139,23 @@ void WiFiConnection::createAccessPoint()
     server.begin();
 }
 
+void WiFiConnection::setup() {
+    WiFiSSID = WiFi.SSID().c_str();
+    reloadCityName();
+    if (cityName.empty()) {
+        createAccessPoint();
+    } else {
+        connectToWiFiRouter();
+    }
+}
+
 void WiFiConnection::makeAPIRequest()
 {
     HTTPClient http;
     // Example URL:
     // https://api.openweathermap.org/data/2.5/onecall?&units=metric&lat=41.4926947&lon=2.3570073&exclude=minutely,hourly,alerts&appid=fdcc7faa093ed6c4ff18ab74330ed00b
 
-    string queryString = "q=" + cityName;
+    string queryString = "q=" + reloadCityName();
     queryString += "&appid=" + API_APP_ID;
     queryString += "&units=metric";
     string targetURL = API_BASE_URL + "?" + queryString;
@@ -140,8 +163,12 @@ void WiFiConnection::makeAPIRequest()
     Serial.println(targetURL.c_str());
 
     http.begin(targetURL.c_str());     // Specify request destination
-    http.GET();                        // Send the request
+    int statusCode = http.GET();       // Send the request
     String payload = http.getString(); // Get the response payload
+    if (statusCode != 200) {
+        createAccessPoint();
+        return;
+    }
     StaticJsonDocument<900> payloadJSON;
     DeserializationError error = deserializeJson(payloadJSON, payload.c_str());
 
@@ -149,6 +176,7 @@ void WiFiConnection::makeAPIRequest()
     {
         Serial.print("deserializeJson() failed: ");
         Serial.println(error.f_str());
+        createAccessPoint();
         return;
     }
 

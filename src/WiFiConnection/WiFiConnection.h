@@ -40,6 +40,7 @@ class WiFiConnection
         static bool isWiFiConnected;
         static bool isForceApiRequest;
         float currentTemperature = 0;
+        void setup();
         static void connectToWiFiRouter();
         static void createAccessPoint();
         static String htmlProcessor(const String& var);

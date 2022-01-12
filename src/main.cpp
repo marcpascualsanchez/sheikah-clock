@@ -30,7 +30,7 @@ void setup()
   currentTime = clockController.getTime();
   displayController.displayNumber(clockController.getFormattedTime(currentTime));
   rgbLedsController.setup();
-  connectionController.connectToWiFiRouter();
+  connectionController.setup();
   Serial.println("Modules ready");
 }
 
