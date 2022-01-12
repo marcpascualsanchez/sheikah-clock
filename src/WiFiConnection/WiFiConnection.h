@@ -32,12 +32,12 @@ const string SNOW = "13";             // snow
 class WiFiConnection
 {
     public:
+        int maxConnectionRetries = 20;
         string currentWeather = CLEAR_SKY;
+        bool isWiFiConnected = false;
         float currentTemperature = 0;
         void connectToWiFiRouter();
         void createAccessPoint();
-        void savePersistentConfig(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final);
-        void savePersistentCityName(string newCityName);
         void makeAPIRequest();
         string getWeather();
         void setWeather(string newWeather);

@@ -30,39 +30,38 @@ void setup()
   currentTime = clockController.getTime();
   displayController.displayNumber(clockController.getFormattedTime(currentTime));
   rgbLedsController.setup();
-  // connectionController.connectToWiFiRouter();
-  connectionController.createAccessPoint();
+  connectionController.connectToWiFiRouter();
   Serial.println("Modules ready");
-  // getAPILoop();
+  getAPILoop();
 }
 
 void loop()
 {
-  // tickCount += 1;
-  // if (tickCount == 0)
-  // {
-  //   currentTime = clockController.getTime();
-  //   lastMinute = currentTime.min;
-  //   isTimeShowed = false;
-  // }
+  tickCount += 1;
+  if (tickCount == 0)
+  {
+    currentTime = clockController.getTime();
+    lastMinute = currentTime.min;
+    isTimeShowed = false;
+  }
 
-  // if (currentTime.min % 5 == 0)
-  // {
-  //   if (!isAPIRequestDone)
-  //   {
-  //     getAPILoop();
-  //   }
-  // }
-  // else
-  // {
-  //   isAPIRequestDone = false;
-  // }
+  if (currentTime.min % 5 == 0 && connectionController.isWiFiConnected)
+  {
+    if (!isAPIRequestDone)
+    {
+      getAPILoop();
+    }
+  }
+  else
+  {
+    isAPIRequestDone = false;
+  }
 
-  // clockController.checkButtons();
-  // // Only display new sec if has changed
-  // display(currentTime);
-  // rgbLedsController.displayLeds(false);
-  // lastConfigState = clockController.configState;
+  clockController.checkButtons();
+  // Only display new sec if has changed
+  display(currentTime);
+  rgbLedsController.displayLeds(false);
+  lastConfigState = clockController.configState;
 }
 
 void getAPILoop()
