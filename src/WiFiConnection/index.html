@@ -1,0 +1,36 @@
+<!DOCTYPE HTML><html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    html {
+     font-family: Arial;
+     display: inline-block;
+     margin: 0px auto;
+     text-align: center;
+    }
+    h2 { font-size: 3.0rem; }
+    p { font-size: 3.0rem; }
+    .units { font-size: 1.2rem; }
+    .dht-labels{
+      font-size: 1.5rem;
+      vertical-align:middle;
+      padding-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Sheikah clock</h2>
+  <p>
+    <span class="dht-labels">Fill the form to configurate the clock. This data will only be used by the clock to display the weather & temperature.</span>
+  </p>
+  <form action="/config">
+    <label for="ssid">WiFi name</label><br>
+    <input type="text" id="ssid" name="ssid" value="%WiFiSSID%"><br><br>
+    <label for="pass">WiFi password</label><br>
+    <input type="password" id="pass" name="pass" value="%WiFiPassword%"><br><br>
+    <label for="city">City name</label><br>
+    <input type="text" id="city" name="city" value="%cityName%"><br><br>
+    <input type="submit" value="Save">
+  </form>
+</body>
+</html>

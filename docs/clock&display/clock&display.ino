@@ -1,6 +1,5 @@
 #include "ds3231.h"
 #include <Wire.h>
-#include <Arduino.h>
 #include <TM1637Display.h>
 
 // Module connection pins (Digital Pins)
